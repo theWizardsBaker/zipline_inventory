@@ -1,4 +1,4 @@
-from zipline.inventory.product import Product
+from inventory.product import Product, ProductDetails
 
 class Order:
     """
@@ -6,44 +6,58 @@ class Order:
 
     Attributes:
         id (int): unique order id
-        products (List[ Product ]): the products requested in the order
+        requested_products (List[ Product ]): the products requested in the order
         quantity (int): number of items ordered
 
     """
-    def __init__(self, id: int, products: list[Product]):
+    def __init__(self, id: int, requested_products: list[ProductDetails]):
+        """
+        create order
+        """
         self.id = id
-        self.products = products
-        self.fulfilled = False
-        self.__sort_products_by_mass()
+        self.requested_products = requested_products
+        self.__sort_requested_products_by_mass()
 
     def __repr__(self):
-        return "Order<id: {}, fulfilled: {}, products: {}>".format(
-            self.id,
-            self.fulfilled,
-            [ str(product) for product in self.products ].join(', ')
-        )
+        return "Order<id: {}, requested_products: {}>".format(self.id, self.requested_products)
 
     def quantity(self) -> int:
         # returns: number of items to fulfill
-        return len(self.products)
+        return sum([ product.quantity for product in self.requested_products ])
 
-    def __sort_products_by_mass(self):
-        # quick sort products by mass
-        def sort(products, left, right):
+    def ship_product(self, product_id: int, quantity: int):
+        """
+        find product in requested_productes
+ 
+        Parameters:
+            product_id (int): product to remove from an order
+            quantity (int): the number of product_id to remove
+        """
+        for req_ind, request in enumerate(self.requested_products):
+            if request.product.id == product_id:
+                # ship the product (remove quantity from order)
+                request.ship(quantity)
+                # if no more quantity is needed to ship, remove from order
+                if request.quantity_available < 1:
+                    self.requested_products.remove(req_ind)
+
+    def __sort_requested_products_by_mass(self):
+        # quick sort requested_products by mass
+        def sort(requests, left, right):
             if left < right:
 
                 next_left = left - 1
-                pivot_mass = products[right].mass
+                pivot_mass = requests[right].product.mass
              
                 for x in range(left, right):
-                    if products[x].mass <= pivot:
+                    if requests[x].product.mass <= pivot_mass:
                         next_left = next_left + 1
-                        products[next_left], products[x] = products[x], products[next_left]
+                        requests[next_left], requests[x] = requests[x], requests[next_left]
              
-                products[next_left + 1], products[right] = products[right], products[next_left + 1]
+                requests[next_left + 1], requests[right] = requests[right], requests[next_left + 1]
 
-            sort(products, left, next_left)
-            sort(products, next_left + 1, right)
+                sort(requests, left, next_left)
+                sort(requests, next_left + 1, right)
 
-        if len(self.products) > 1:
-            self.products = sort(self.products, 0, len(self.products))
+        if len(self.requested_products) > 1:
+            sort(self.requested_products, 0, len(self.requested_products) - 1)

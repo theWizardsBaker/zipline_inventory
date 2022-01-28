@@ -26,7 +26,7 @@ class ProductDetails:
 
     Attributes:
         quantity_available (bool): number of each product
-        products (Product): the product
+        product (Product): the product
 
     """
 
@@ -35,10 +35,22 @@ class ProductDetails:
         self.product = product
 
     def stock(self, quantity):
+        """
+        stock product
+ 
+        Parameters:
+            quantity (int): quantity to add to product stock
+        """
         if quantity > 0:
             self.quantity_available = self.quantity_available + quantity
 
     def ship(self, quantity):
+        """
+        ship product
+ 
+        Parameters:
+            quantity (int): quantity of product stock to remove
+        """
         if quantity > 0:
             self.quantity_available = self.quantity_available - quantity
 
