@@ -5,8 +5,7 @@ class Catalog:
     Catalog of shippable products
 
     Attributes:
-        inventory (dict{ product_id: ProductDetails }): 
-
+        inventory (dict{ product_id: ProductDetails }): dict to keep track of inventory by product_id
     """
 
     def __init__(self):
@@ -16,9 +15,29 @@ class Catalog:
         inv = [ str(inv) for inv in self.inventory.values()]
         return "Catalog<\n\r{}\n\r>".format('\n\r'.join(inv))
 
-    def in_stock_products(self, product_id: int) -> bool:
-        # check if an product is in stock
-        return all([product_id in self.inventory, self.inventory[product_id].quantity_available > 0])
+    def in_stock_product(self, product_id: int) -> bool:
+        """
+        check if an product is in stock
+
+        Parameters:
+            product_id (int): id to check
+
+        Returns:
+            if product is in stock
+        """
+        return all([product_id in self.inventory, self.inventory[product_id].quantity > 0])
+
+    def ship_product(self, product_id: int, quantity: int):
+        """
+        reduce quantity from catalog when product is shipped
+        
+        Parameters:
+            product_id (int): id to retrieve
+            quantity (int): amount to decrease by
+        """
+        product = self.get_product(product_id)
+        if product:
+            product.ship(quantity)
 
     def get_product(self, product_id: int) -> ProductDetails:
         """
@@ -88,4 +107,4 @@ class Catalog:
             product_id (int): id to remove inventory
         """
         if self.in_stock(product_id):
-            self.inventory[product_id].quantity_available = self.inventory[product_id].quantity_available - 1
+            self.inventory[product_id].quantity = self.inventory[product_id].quantity - 1

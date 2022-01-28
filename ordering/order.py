@@ -11,9 +11,6 @@ class Order:
 
     """
     def __init__(self, id: int, requested_products: list[ProductDetails]):
-        """
-        create order
-        """
         self.id = id
         self.requested_products = requested_products
         self.__sort_requested_products_by_mass()
@@ -38,7 +35,7 @@ class Order:
                 # ship the product (remove quantity from order)
                 request.ship(quantity)
                 # if no more quantity is needed to ship, remove from order
-                if request.quantity_available < 1:
+                if request.quantity < 1:
                     self.requested_products.remove(req_ind)
 
     def __sort_requested_products_by_mass(self):

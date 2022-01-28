@@ -12,9 +12,6 @@ class Product:
         self.name = name
         self.mass = mass
 
-    def __str__(self):
-        return self.__repr__()
-
     def __repr__(self):
         return "Product<id: {}, name: {}, mass: {}>".format(self.id, self.name, self.mass)
 
@@ -25,15 +22,18 @@ class ProductDetails:
     Shippable Order Class
 
     Attributes:
-        quantity_available (bool): number of each product
+        quantity (bool): number of each product
         product (Product): the product
 
     """
 
     def __init__(self, product: type[Product], available: int = 0):
-        self.quantity_available = available
+        self.quantity = available
         self.product = product
 
+    def __repr__(self):
+        return "ProductDetails<quantity: {}, product: {}>".format(self.quantity, self.product)
+        
     def stock(self, quantity):
         """
         stock product
@@ -42,7 +42,7 @@ class ProductDetails:
             quantity (int): quantity to add to product stock
         """
         if quantity > 0:
-            self.quantity_available = self.quantity_available + quantity
+            self.quantity = self.quantity + quantity
 
     def ship(self, quantity):
         """
@@ -52,10 +52,4 @@ class ProductDetails:
             quantity (int): quantity of product stock to remove
         """
         if quantity > 0:
-            self.quantity_available = self.quantity_available - quantity
-
-    def __str__(self):
-        return self.__repr__()
-
-    def __repr__(self):
-        return "ProductDetails<quantity: {}, product: {}>".format(self.quantity_available, self.product)
+            self.quantity = self.quantity - quantity

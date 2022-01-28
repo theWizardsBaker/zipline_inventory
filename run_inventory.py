@@ -10,4 +10,6 @@ inventory_system.process_restock('[{"product_id": 0, "quantity": 30}, {"product_
 
 inventory_system.process_order('{"order_id": 123, "requested": [{"product_id": 0, "quantity": 2}, {"product_id": 10, "quantity": 4}, {"product_id": 4, "quantity": 4}, {"product_id": 2, "quantity": 4}]}')
 
-inventory_system.ship_packages()
+inventory_system.process_order('{"order_id": 123, "requested": [{"product_id": 0, "quantity": 2}, {"product_id": 10, "quantity": 4}, {"product_id": 4, "quantity": 4}, {"product_id": 2, "quantity": 4}]}')
+
+inventory_system.ship_package()
