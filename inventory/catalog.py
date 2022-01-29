@@ -39,9 +39,9 @@ class Catalog:
             product_id (int): id to retrieve
             quantity (int): amount to decrease by
         """
-        product = self.get_product(product_id)
-        if product:
-            product.ship(quantity)
+        product_details = self.get_product(product_id)
+        if product_details:
+            product_details.ship(quantity)
 
     def get_product(self, product_id: int) -> ProductDetails:
         """
@@ -78,7 +78,7 @@ class Catalog:
     def get_inventory(self) -> list[ProductDetails]:
         # return all inventory products that have quantity available
         return [
-            inv for inv in self.inventory if self.in_stock_product(
+            inv for inv in self.inventory.values() if self.in_stock_product(
                 inv.product.id
             )
         ]
@@ -106,13 +106,3 @@ class Catalog:
                 ),
                 quantity
             )
-
-    def remove_inventory(self, product_id: int):
-        """
-        reduce the quantity available for a product
-
-         Parameters:
-            product_id (int): id to remove inventory
-        """
-        if self.in_stock(product_id):
-            self.inventory[product_id].quantity = self.inventory[product_id].quantity - 1
