@@ -3,15 +3,21 @@ from inventory.product import ProductDetails
 from inventory.catalog import Catalog
 from .package import Package
 
+
 class ShipPackage(object):
     """
     Methods for sending packages
     """
-    def __init__(self, ):
+
+    def __init__(self):
         pass
 
     @classmethod
-    def ship(self, current_order: list[ProductDetails], catalog: type[Catalog]) -> type[Package]:
+    def ship(
+            self,
+            current_order: list[ProductDetails],
+            catalog: type[Catalog]
+        ) -> type[Package]:
         """
         find products in the order that can be shipped together
 

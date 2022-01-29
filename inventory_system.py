@@ -5,6 +5,7 @@ from inventory.product import ProductDetails
 from ordering.order import Order
 from shipping.ship import ShipPackage
 
+
 class InventorySystem:
     """
     System for managing inventory
@@ -15,6 +16,7 @@ class InventorySystem:
         backorder_orders (list): orders that cannot be filled due to product shortages
 
     """
+
     def __init__(self):
         self.catalog = Catalog()
         self.orders_queue = Queue()
@@ -44,7 +46,7 @@ class InventorySystem:
             order_id: int
             requested: [
                 {
-                    product_id: int, 
+                    product_id: int,
                     quantity: int
                 }
             ]
@@ -54,12 +56,16 @@ class InventorySystem:
         def create_product_detail(request):
             product_details = self.catalog.get_product(request['product_id'])
             if product_details:
-                return ProductDetails(product_details.product, request['quantity'])
+                return ProductDetails(
+                    product_details.product, request['quantity'])
             else:
                 return None
 
         order = json.loads(order_json)
-        request_product_details = map(create_product_detail, order['requested'])
+        request_product_details = map(
+            create_product_detail,
+            order['requested']
+        )
         # create order and add it to the queue
         self.orders_queue.put(
             Order(
@@ -91,12 +97,15 @@ class InventorySystem:
             current_order = self.orders_queue.get()
 
             while current_order.quantity() > 0:
-                shipping_package = ShipPackage.ship(current_order.requested_products, self.catalog)
-                # if we have orders that cannot be fufilled due to lack of stock
+                shipping_package = ShipPackage.ship(
+                    current_order.requested_products,
+                    self.catalog
+                )
+                # if we have orders that cannot be fufilled due to lack of
+                # stock
                 if not shipping_package.products and current_order.quantity() > 0:
                     # backorder the order
                     self.backorder_orders.append(current_order)
                     break
-
 
         print("Backorder: ", self.backorder_orders)

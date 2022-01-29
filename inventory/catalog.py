@@ -1,18 +1,19 @@
 from .product import Product, ProductDetails
 
+
 class Catalog:
     """
     Catalog of shippable products
 
     Attributes:
-        inventory (dict{ product_id: ProductDetails }): dict to keep track of inventory by product_id
+        inventory (dict{ product_id: ProductDetails }): keep track of inventory by product_id
     """
 
     def __init__(self):
         self.inventory = {}
 
     def __repr__(self):
-        inv = [ str(inv) for inv in self.inventory.values()]
+        inv = [str(inv) for inv in self.inventory.values()]
         return "Catalog<\n\r{}\n\r>".format('\n\r'.join(inv))
 
     def in_stock_product(self, product_id: int) -> bool:
@@ -25,12 +26,15 @@ class Catalog:
         Returns:
             if product is in stock
         """
-        return all([product_id in self.inventory, self.inventory[product_id].quantity > 0])
+        return all([
+            product_id in self.inventory,
+            self.inventory[product_id].quantity > 0
+        ])
 
     def ship_product(self, product_id: int, quantity: int):
         """
         reduce quantity from catalog when product is shipped
-        
+
         Parameters:
             product_id (int): id to retrieve
             quantity (int): amount to decrease by
@@ -42,7 +46,7 @@ class Catalog:
     def get_product(self, product_id: int) -> ProductDetails:
         """
         retrieve product by id
-        
+
         Parameters:
             product_id (int): id to retrieve
 
@@ -57,7 +61,7 @@ class Catalog:
     def stock_inventory(self, products: list):
         """
         add inventory stock
-        
+
         Parameters:
             products shape:
             [
@@ -73,7 +77,11 @@ class Catalog:
 
     def get_inventory(self) -> list[ProductDetails]:
         # return all inventory products that have quantity available
-        return [inv for inv in self.inventory if self.in_stock(inv.product.id)]
+        return [
+            inv for inv in self.inventory if self.in_stock_product(
+                inv.product.id
+            )
+        ]
 
     def add_inventory(self, inventory: list[dict]):
         """

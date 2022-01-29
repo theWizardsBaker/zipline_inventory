@@ -7,14 +7,18 @@ class Product:
         name (str): display name for product
         mass (int): product mass in grams
     """
+
     def __init__(self, id: int, name: str, mass: int):
         self.id = id
         self.name = name
         self.mass = mass
 
     def __repr__(self):
-        return "Product<id: {}, name: {}, mass: {}>".format(self.id, self.name, self.mass)
-
+        return "Product<id: {}, name: {}, mass: {}>".format(
+            self.id,
+            self.name,
+            self.mass
+        )
 
 
 class ProductDetails:
@@ -32,12 +36,15 @@ class ProductDetails:
         self.product = product
 
     def __repr__(self):
-        return "ProductDetails<quantity: {}, product: {}>".format(self.quantity, self.product)
-        
+        return "ProductDetails<quantity: {}, product: {}>".format(
+            self.quantity,
+            self.product
+        )
+
     def stock(self, quantity):
         """
         stock product
- 
+
         Parameters:
             quantity (int): quantity to add to product stock
         """
@@ -47,7 +54,7 @@ class ProductDetails:
     def ship(self, quantity):
         """
         ship product
- 
+
         Parameters:
             quantity (int): quantity of product stock to remove
         """
