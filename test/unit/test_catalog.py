@@ -2,7 +2,6 @@ import unittest
 import json
 import os
 from inventory.catalog import Catalog
-from inventory.product import Product, ProductDetails
 CATALOG_JSON_FILE = os.path.join(os.path.dirname(__file__), '../fixtures/test_catalog.json')
 INVENTORY_JSON_FILE = os.path.join(os.path.dirname(__file__), '../fixtures/test_restock.json')
 
@@ -47,10 +46,10 @@ class TestCatalog(unittest.TestCase):
 		self.catalog.ship_product(product_details.product.id, 1)
 		self.assertEqual(product_details.quantity, quantity - 1)
 
-	def test_empty_inventory(self):
+	def test_get_empty_inventory(self):
 		self.assertEqual(0, len(self.catalog.get_inventory()))
 
-	def test_empty_inventory(self):
+	def test_full_inventory(self):
 		self.stock_inventory()
 		with open(CATALOG_JSON_FILE, 'r') as f:
 			catalog_json = json.load(f)
