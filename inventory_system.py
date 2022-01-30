@@ -108,4 +108,10 @@ class InventorySystem:
                     self.backorder_orders.append(current_order)
                     break
 
-        print("Backorder: ", self.backorder_orders)
+        # print("Backorder: ", self.backorder_orders)
+
+    def get_backorders(self) -> list[Order]:
+        """
+        return all orders that have backorder items
+        """
+        return self.backorder_orders
