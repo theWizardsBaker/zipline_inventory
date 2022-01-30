@@ -26,5 +26,5 @@ class Package:
     def products(self):
         return self._products
 
-    def add_product(self, product):
+    def add_product(self, product: ProductDetails):
         self._products.append(product)
