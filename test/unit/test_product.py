@@ -1,5 +1,7 @@
 import unittest
 from inventory.product import Product, ProductDetails
+from util.exceptions import InadequateProduct
+
 
 class TestProduct(unittest.TestCase):
 
@@ -31,3 +33,8 @@ class TestProduct(unittest.TestCase):
 		quantity = self.product_details.quantity
 		self.product_details.ship(1)
 		self.assertEqual(self.product_details.quantity, quantity - 1)
+
+	def test_product_details_ship_more_than_on_hand(self):
+		quantity = self.product_details.quantity
+		with self.assertRaises(InadequateProduct):
+			self.product_details.ship(40)

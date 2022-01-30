@@ -1,5 +1,5 @@
 from inventory.product import Product, ProductDetails
-
+from util.exceptions import InadequateProduct
 
 class Order:
     """
@@ -37,11 +37,15 @@ class Order:
         """
         for req_ind, request in enumerate(self.requested_products):
             if request.product.id == product_id:
+                # can't ship more than the on-hand
+                if request.quantity < quantity:
+                    raise InadequateProduct(quantity, request.quantity, "Order")
+                    break
                 # ship the product (remove quantity from order)
                 request.ship(quantity)
                 # if no more quantity is needed to ship, remove from order
                 if request.quantity < 1:
-                    self.requested_products.remove(req_ind)
+                    self.requested_products.pop(req_ind)
 
     def __sort_requested_products_by_mass(self):
         # quick sort requested_products by mass

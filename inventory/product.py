@@ -1,3 +1,5 @@
+from util.exceptions import InadequateProduct
+
 class Product:
     """
     Product Class
@@ -59,4 +61,9 @@ class ProductDetails:
             quantity (int): quantity of product stock to remove
         """
         if quantity > 0:
-            self.quantity = self.quantity - quantity
+            new_quantity = self.quantity - quantity
+            if new_quantity >= 0:
+                self.quantity = new_quantity
+            else:
+                raise InadequateProduct(quantity, self.quantity, "Product")
+
